@@ -184,6 +184,11 @@ class EM_Gateway_Realex_Redirect extends EM_Gateway {
 			"PROD_ID" => $EM_Booking->event_id
 		);
 
+		$sub_acc = get_option('em_'. $this->gateway . "_account" );
+		if( !empty( $sub_acc ) ) {
+			$form_vars['ACCOUNT'] = $sub_acc;
+		}
+
 		return apply_filters('em_gateway_realex_redirect_get_form_vars', $form_vars, $EM_Booking, $this);
 	}
 
