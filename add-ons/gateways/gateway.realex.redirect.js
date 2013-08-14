@@ -8,6 +8,6 @@ $(document).bind('em_booking_gateway_add_realex', function(event, response){
 			rrForm.append('<input type="hidden" name="'+index+'" value="'+value+'" />');
 		});
 		rrForm.append('<input id="em-paypal-submit" type="submit" style="display:none" />');
-		rrForm.insertAfter('#em-booking-form').trigger('submit');
+		rrForm.appendTo('body').trigger('submit');
 	}
 });
