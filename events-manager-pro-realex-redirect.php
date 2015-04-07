@@ -3,11 +3,13 @@
 Plugin Name: Events Manager Pro - RealEx Redirect Gateway
 Plugin URI: http://wp-events-plugin.com
 Description: RealEx Redirect gateway pluging for Events Manager Pro
-Version: 1.1
+Version: 1.2
 Depends: Events Manager Pro
 Author: Andy Place
 Author URI: http://www.andyplace.co.uk
 */
+
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 class EM_Pro_Realex_Redirect {
 
@@ -23,8 +25,12 @@ class EM_Pro_Realex_Redirect {
 	}
 
 	function init() {
-		//add-ons
-		include('add-ons/gateways/gateway.realex.redirect.php');
+		if( is_plugin_active('events-manager/events-manager.php') && is_plugin_active('events-manager-pro/events-manager-pro.php') ) {
+			//add-ons
+			include('add-ons/gateways/gateway.realex.redirect.php');
+		}else{
+			add_action( 'admin_notices', array(&$this,'not_activated_error_notice') );
+		}
 	}
 
 	/*
@@ -37,6 +43,15 @@ class EM_Pro_Realex_Redirect {
 		$wp->add_query_var('action');
 		$wp->add_query_var('em_payment_gateway');
 		$wp_rewrite->add_rule('^realex-redirect-return$', '/wp-admin/admin-ajax.php?action=em_payment&em_payment_gateway=realex', 'top');
+	}
+
+	/**
+	 * Display error message if Events Manager or Events Manager Pro are not active
+	 */
+	function not_activated_error_notice() {
+		$class = "error";
+		$message = __('Please ensure both Events Manager and Events Manager Pro are enabled for the Realex Redirect Gateway to work.', 'em-pro');
+		echo '<div class="'.$class.'"> <p>'.$message.'</p></div>';
 	}
 }
 
