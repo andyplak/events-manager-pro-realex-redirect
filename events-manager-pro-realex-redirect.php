@@ -3,7 +3,7 @@
 Plugin Name: Events Manager Pro - RealEx Redirect Gateway
 Plugin URI: http://wp-events-plugin.com
 Description: RealEx Redirect gateway pluging for Events Manager Pro
-Version: 1.0
+Version: 1.1
 Depends: Events Manager Pro
 Author: Andy Place
 Author URI: http://www.andyplace.co.uk

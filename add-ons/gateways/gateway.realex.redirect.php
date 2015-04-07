@@ -184,6 +184,11 @@ class EM_Gateway_Realex_Redirect extends EM_Gateway {
 			"PROD_ID" => $EM_Booking->event_id
 		);
 
+		$sub_acc = get_option('em_'. $this->gateway . "_account" );
+		if( !empty( $sub_acc ) ) {
+			$form_vars['ACCOUNT'] = $sub_acc;
+		}
+
 		return apply_filters('em_gateway_realex_redirect_get_form_vars', $form_vars, $EM_Booking, $this);
 	}
 
@@ -311,7 +316,7 @@ class EM_Gateway_Realex_Redirect extends EM_Gateway {
 
 	        	//Set booking status, but no emails sent
 				if( !get_option('em_'.$this->gateway.'_manual_approval', false) || !get_option('dbem_bookings_approval') ){
-					$EM_Booking->set_status(1, false); //Approve
+					$EM_Booking->approve(); //Approve
 				}else{
 					$EM_Booking->set_status(0, false); //Set back to normal "pending"
 				}
@@ -436,6 +441,13 @@ Events Manager
 				  <td><input type="text" name="merchant_id" value="<?php esc_attr_e(get_option( 'em_'. $this->gateway . "_merchant_id", "" )); ?>" /></td>
 			</tr>
 			<tr valign="top">
+				  <th scope="row"><?php _e('Account', 'emp-pro') ?></th>
+				  <td>
+				  	<input type="text" name="account" value="<?php esc_attr_e(get_option( 'em_'. $this->gateway . "_account", "" )); ?>" />
+				  	<em><?php _e('Enter RealEx sub account name if set up. Leave blank for default.', 'em-pro'); ?></em>
+				  </td>
+			</tr>
+			<tr valign="top">
 			 	<th scope="row"><?php _e('Shared Secret', 'emp-pro') ?></th>
 			    <td><input type="password" name="shared_secret" value="<?php esc_attr_e(get_option( 'em_'. $this->gateway . "_shared_secret", "" )); ?>" /></td>
 			</tr>
@@ -482,6 +494,7 @@ Events Manager
 		if( !empty($_REQUEST['Submit']) ) {
 			$gateway_options = array(
 				$this->gateway . "_merchant_id" => $_REQUEST[ 'merchant_id' ],
+				$this->gateway . "_account" => $_REQUEST[ 'account' ],
 				$this->gateway . "_shared_secret" => $_REQUEST[ 'shared_secret' ],
 				$this->gateway . "_return_success" => $_REQUEST[ 'return_success' ],
 				$this->gateway . "_return_fail" => $_REQUEST[ 'return_fail' ],
